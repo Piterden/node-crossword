@@ -9,9 +9,9 @@ class Crossword extends BaseClass {
     }
   }
 
-  constructor () {
-    super(...arguments)
-  }
+  // constructor () {
+  //   super(...arguments)
+  // }
 
   get horizontalWords () {
     return this.createWordsMap(

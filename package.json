@@ -4,12 +4,24 @@
   "description": "Crossword puzzle library",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --watch src --config build/webpack.config.js src/index.js"
   },
   "author": "Denis Efremov <efremov.a.denis@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "babel-eslint": "^10.0.2",
+    "babel-loader": "^8.0.6",
+    "dotenv": "^8.0.0",
     "eslint": "^6.0.1",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-loader": "^2.2.1",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "terser-webpack-plugin": "^1.3.0",
     "webpack": "^4.36.0",
     "webpack-cli": "^3.3.6"
   },

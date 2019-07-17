@@ -107,8 +107,7 @@ class Grid extends BaseClass {
     if (hSym && vSym) {
       fillWidth = Math.round(this.width / 2)
       fillHeight = Math.round(this.height / 2)
-    }
-    else {
+    } else {
       fillWidth = hSym ? this.width : Math.round(this.width / 2)
       fillHeight = vSym ? this.height : Math.round(this.height / 2)
     }
@@ -161,8 +160,7 @@ class Grid extends BaseClass {
               ])
             })
         }
-      }
-      else {
+      } else {
         words.push([
           isVertical ? row : 1,
           isVertical ? 1 : row,
