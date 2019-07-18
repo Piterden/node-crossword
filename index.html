@@ -12,11 +12,48 @@
 .blank {
   background: #000;
 }
+.controls {
+  display: flex;
+  margin: 10px 0 20px;
+  justify-content: space-around;
+}
+.field-group {
+
+}
+#forms {
+  display: flex;
+}
+.letters-wrapper {
+  display: flex;
+}
+.letters-wraper input {
+  width: 20px;
+  height: 20px;
+  margin: -1px -1px 0 0;
+}
 </style>
 </head>
 
 <body>
-  <div id="crossword"></div>
+
+  <div class="controls">
+    <div class="field-group main">
+      <button class="btn mode">Mode: Grid</button>
+    </div>
+    <div class="field-group symmetry">
+      <button class="btn">Horizontal</button>
+      <button class="btn">Vertical</button>
+      <button class="btn">Both</button>
+    </div>
+  </div>
+
+  <main>
+    <div id="crossword"></div>
+    <div id="forms">
+      <div id="horizontal" class="form horizontal"></div>
+      <div id="vertical" class="form vertical"></div>
+    </div>
+  </main>
 
   <script src="dist/main.js"></script>
   <script src="demo.js"></script>

@@ -41,10 +41,33 @@ const crossword = new Crossword(initialGrid)
 
 console.log(crossword)
 const el = document.getElementById('crossword')
-
+const vertical = document.getElementById('vertical')
+const horizontal = document.getElementById('horizontal')
 const startCells = new Map(
   crossword.grid.words.map(({ x, y, index }) => [`${x}:${y}`, index])
 )
+
+const createWordForm = (word) => {
+  const letters = Array.from(
+    { length: word.length },
+    (item, idx) => `<div class="letter-wrap">
+<input type="text"
+  size="1"
+  minlength="1"
+  maxlength="1"
+  readonly />
+</div>`,
+  ).join('')
+
+  return `
+<div class="form">
+  <div class="letters-wrapper">
+    ${letters}
+  </div>
+
+</div>
+`
+}
 
 const render = () => {
   const grid = Array.from(crossword.grid.cells.values())
@@ -65,6 +88,11 @@ const render = () => {
     ${grid}
   </div>
   `
+
+  vertical.innerHTML = [...crossword.verticalWords.values()]
+    .map((word) => createWordForm(word)).join('')
+  horizontal.innerHTML = [...crossword.horizontalWords.values()]
+    .map((word) => createWordForm(word)).join('')
 
   const cellEls = Array.from(document.querySelectorAll('.cell'))
 
