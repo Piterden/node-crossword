@@ -76,6 +76,7 @@ class Grid extends BaseClass {
   }
 
   rebuildGrid ({ width, height }) {
+    this.blanks.clear()
     this.width = width
     this.height = height
     this.cells = this.rebuildCells()

@@ -46,30 +46,34 @@ const startCells = new Map(
   crossword.grid.words.map(({ x, y, index }) => [`${x}:${y}`, index])
 )
 
-const grid = Array.from(crossword.grid.cells.values())
-  .map((cell) => `<div
-  class="cell${crossword.grid.blanks.has(cell + []) ? ' blank' : ''}"
-  data-id="${cell + []}"
->
-${startCells.get(cell + []) ? '<sup>' + startCells.get(cell + []) + '</sup>' : ''}
-</div>`)
-  .join('')
+const render = () => {
+  const grid = Array.from(crossword.grid.cells.values())
+    .map((cell) => `<div
+    class="cell${crossword.grid.blanks.has(cell + []) ? ' blank' : ''}"
+    data-id="${cell + []}"
+  >
+  ${startCells.get(cell + []) ? '<sup>' + startCells.get(cell + []) + '</sup>' : ''}
+  </div>`)
+    .join('')
 
-el.innerHTML = `
-<div id="grid"
-  style="
-    grid-template-columns:repeat(${crossword.grid.width}, 30px);
-    grid-template-rows:repeat(${crossword.grid.height}, 30px);
-  ">
-  ${grid}
-</div>
-`
+  el.innerHTML = `
+  <div id="grid"
+    style="
+      grid-template-columns:repeat(${crossword.grid.width}, 30px);
+      grid-template-rows:repeat(${crossword.grid.height}, 30px);
+    ">
+    ${grid}
+  </div>
+  `
 
-const cellEls = Array.from(document.querySelectorAll('.cell'))
+  const cellEls = Array.from(document.querySelectorAll('.cell'))
 
-cellEls.forEach((cellEl) => {
-  cellEl.addEventListener('click', (e) => {
-    // console.log(e.target.dataset.id)
-    crossword.grid.toggleBlank(e.target.dataset.id)
+  cellEls.forEach((cellEl) => {
+    cellEl.addEventListener('click', (e) => {
+      crossword.grid.toggleBlank(e.target.dataset.id)
+      render()
+    })
   })
-})
+}
+
+render()
