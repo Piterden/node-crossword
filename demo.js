@@ -39,6 +39,7 @@ const { Grid, Crossword } = window.X
 const initialGrid = new Grid(33, 19, blanks, 'test')
 const crossword = new Crossword(initialGrid)
 
+console.log(crossword)
 const el = document.getElementById('crossword')
 
 const startCells = new Map(
@@ -46,7 +47,10 @@ const startCells = new Map(
 )
 
 const grid = Array.from(crossword.grid.cells.values())
-  .map((cell) => `<div class="cell${crossword.grid.blanks.includes(cell) ? ' blank' : ''}">
+  .map((cell) => `<div
+  class="cell${crossword.grid.blanks.has(cell + []) ? ' blank' : ''}"
+  data-id="${cell + []}"
+>
 ${startCells.get(cell + []) ? '<sup>' + startCells.get(cell + []) + '</sup>' : ''}
 </div>`)
   .join('')
@@ -60,3 +64,12 @@ el.innerHTML = `
   ${grid}
 </div>
 `
+
+const cellEls = Array.from(document.querySelectorAll('.cell'))
+
+cellEls.forEach((cellEl) => {
+  cellEl.addEventListener('click', (e) => {
+    // console.log(e.target.dataset.id)
+    crossword.grid.toggleBlank(e.target.dataset.id)
+  })
+})
