@@ -16,78 +16,77 @@ class Grid extends BaseClass {
   constructor (width, height, blanks, name) {
     super(width, height, blanks, name)
 
-    this.cells = new Map(Array.from({ length: this.height }, (col, idx) => idx + 1)
-      .flatMap((col) => Array.from(
-        { length: this.width },
-        (row, idx) => [`${idx + 1}:${col}`, new Cell(idx + 1, col)],
-      )))
-    this.blanks = this.blanks.map((id) => this.cells.get(id))
-  }
-
-  getCell (id) {
-    return this.cells.get(id)
-  }
-
-  addBlank (id) {
-    this.blanks.push(this.getCell(id))
+    this.cells = this.rebuildCells()
+    this.blanks = new Set(this.blanks)
+    this.symmetry = {
+      horizontal: true,
+      vertical: true,
+    }
   }
 
   addBlanks (...ids) {
     ids.forEach((id) => {
-      this.addBlank(id)
+      this.blanks.add(id)
     })
   }
 
-  removeBlank (id) {
-    this.blanks = this.blanks.filter((blank) => `${blank}` !== id)
+  removeBlanks (...ids) {
+    ids.forEach((id) => {
+      this.blanks.delete(id)
+    })
   }
 
-  blanksUpdate (id) {
+  toggleBlank (id) {
     const [x, y] = id.split(':')
-    const diagonalIndex = `${this.width - x + 1}:${this.height - y + 1}`
-    const verticalIndex = `${this.width - x + 1}:${y}`
-    const horizontalIndex = `${x}:${this.height - y + 1}`
+    const verticalId = `${this.width - x + 1}:${y}`
+    const horizontalId = `${x}:${this.height - y + 1}`
+    const diagonalId = `${this.width - x + 1}:${this.height - y + 1}`
 
-    if (this.blanks.find((blank) => `${blank}` !== id)) {
-      this.removeBlank(id)
+    if (this.blanks.has(id)) {
+      this.blanks.delete(id)
 
-      if (this.verticalSym) {
-        this.removeBlank(verticalIndex)
+      if (this.symmetry.vertical) {
+        this.blanks.delete(verticalId)
       }
 
-      if (this.horizontalSym) {
-        this.removeBlank(horizontalIndex)
+      if (this.symmetry.horizontal) {
+        this.blanks.delete(horizontalId)
       }
 
-      if (this.verticalSym && this.horizontalSym) {
-        this.removeBlank(diagonalIndex)
+      if (this.symmetry.vertical && this.symmetry.horizontal) {
+        this.blanks.delete(diagonalId)
       }
 
       return
     }
 
-    this.addBlank(id)
+    this.blanks.add(id)
 
-    if (this.verticalSym) {
-      this.addBlank(verticalIndex)
+    if (this.symmetry.vertical) {
+      this.blanks.add(verticalId)
     }
 
-    if (this.horizontalSym) {
-      this.addBlank(horizontalIndex)
+    if (this.symmetry.horizontal) {
+      this.blanks.add(horizontalId)
     }
 
-    if (this.verticalSym && this.horizontalSym) {
-      this.addBlank(diagonalIndex)
+    if (this.symmetry.vertical && this.symmetry.horizontal) {
+      this.blanks.add(diagonalId)
     }
-  }
-
-  clearGrid () {
-    this.blanks = []
   }
 
   rebuildGrid ({ width, height }) {
     this.width = width
     this.height = height
+    this.cells = this.rebuildCells()
+  }
+
+  rebuildCells () {
+    return new Map(Array.from({ length: this.height }, (col, idx) => idx + 1)
+      .flatMap((col) => Array.from(
+        { length: this.width },
+        (row, idx) => [`${idx + 1}:${col}`, new Cell(idx + 1, col)],
+      )))
   }
 
   changeSize ({ width, height }) {
@@ -100,7 +99,7 @@ class Grid extends BaseClass {
   }
 
   generateGrid (hSym, vSym, blankProb) {
-    this.blanks = []
+    this.blanks.clear()
     let fillWidth
     let fillHeight
 
@@ -118,7 +117,7 @@ class Grid extends BaseClass {
           continue
         }
 
-        this.blanksUpdate(`${x}:${y}`)
+        this.toggleBlank(`${x}:${y}`)
       }
     }
   }
@@ -128,10 +127,10 @@ class Grid extends BaseClass {
     let row = 1
 
     for (row; row <= (isVertical ? this.width : this.height); row += 1) {
-      const rowBlankCells = this.blanks
+      const rowBlankCells = [...this.blanks]
         // eslint-disable-next-line no-loop-func
-        .filter((cell) => Number(cell[isVertical ? 'x' : 'y']) === row)
-        .map((cell) => Number(cell[isVertical ? 'y' : 'x']))
+        .filter((cell) => Number(cell.split(':')[isVertical ? 0 : 1]) === row)
+        .map((cell) => Number(cell.split(':')[isVertical ? 1 : 0]))
 
       if (rowBlankCells.length > 0) {
         const cols = Array.from({
@@ -181,24 +180,16 @@ class Grid extends BaseClass {
   }
 
   addIndexes (words) {
-    return words
-      .map((word) => {
-        const { index } = this.startCells(words)
-          .find(({ x, y }) => word[0] === x && word[1] === y)
+    return words.map((word) => {
+      const { index } = this.startCells(words)
+        .find(({ x, y }) => word[0] === x && word[1] === y)
 
-        return [...word, index]
-      })
+      return [...word, index]
+    })
   }
 
   startCells (words) {
-    return words
-      .map(([x, y]) => ({ x, y }))
-      .reduce((acc, cur) => {
-        if (!acc.find(({ x, y }) => x === cur.x && y === cur.y)) {
-          acc.push(cur)
-        }
-        return acc
-      }, [])
+    return [...new Set(words.map(([x, y]) => ({ x, y })))]
       .sort((a, b) => a.y === b.y ? a.x - b.x : a.y - b.y)
       .map((word, index) => ({ ...word, index: index + 1 }))
   }
