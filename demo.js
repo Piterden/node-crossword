@@ -46,21 +46,48 @@ const horizontal = document.getElementById('horizontal')
 const startCells = new Map(
   crossword.grid.words.map(({ x, y, index }) => [`${x}:${y}`, index])
 )
+
 const controls = {
-  mode: document.getElementById('btn-mode'),
-  vertical: document.getElementById('btn-vertical'),
-  diagonal: document.getElementById('btn-diagonal'),
-  horizontal: document.getElementById('btn-horizontal'),
-}
-const methods = {
-  mode: () => crossword.toggleMode(),
-  diagonal: () => (crossword.grid.symmetry.diagonal = !crossword.grid.symmetry.diagonal),
-  vertical: () => (crossword.grid.symmetry.vertical = !crossword.grid.symmetry.vertical),
-  horizontal: () => (crossword.grid.symmetry.horizontal = !crossword.grid.symmetry.horizontal),
+  mode: {
+    el: document.getElementById('btn-mode'),
+    events: {
+      click: (e) => {
+        crossword.toggleMode()
+        e.target.innerHTML = `Mode: ${crossword.mode}`
+      },
+    },
+  },
+  vertical: {
+    el: document.getElementById('btn-vertical'),
+    events: {
+      click: (e) => {
+        crossword.grid.symmetry.vertical = !crossword.grid.symmetry.vertical
+        e.target.classList.toggle('enabled')
+      },
+    },
+  },
+  diagonal: {
+    el: document.getElementById('btn-diagonal'),
+    events: {
+      click: (e) => {
+        crossword.grid.symmetry.diagonal = !crossword.grid.symmetry.diagonal
+        e.target.classList.toggle('enabled')
+      },
+    },
+  },
+  horizontal: {
+    el: document.getElementById('btn-horizontal'),
+    events: {
+      click: (e) => {
+        crossword.grid.symmetry.horizontal = !crossword.grid.symmetry.horizontal
+        e.target.classList.toggle('enabled')
+      },
+    },
+  },
 }
 
 Object.keys(controls).forEach((key) => {
-  controls[key].addEventListener('click', (e) => { methods[key]() })
+  controls[key].el.addEventListener('click', controls[key].events.click)
 })
 
 const createWordForm = (word) => {

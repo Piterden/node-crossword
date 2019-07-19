@@ -31,23 +31,28 @@
   height: 20px;
   margin: -1px -1px 0 0;
 }
+.btn {
+  background: #0002;
+}
+.btn.enabled {
+  background: #f0f2;
+}
 </style>
 </head>
 
 <body>
-
-  <div class="controls">
-    <div class="field-group main">
-      <button id="btn-mode" class="btn mode">Mode: Grid</button>
-    </div>
-    <div class="field-group symmetry">
-      <button id="btn-horizontal" class="btn">Horizontal</button>
-      <button id="btn-vertical" class="btn">Vertical</button>
-      <button id="btn-diagonal" class="btn">Diagonal</button>
-    </div>
-  </div>
-
   <main>
+    <div class="controls">
+      <div class="field-group main">
+        <button id="btn-mode" class="btn mode">Mode: grid</button>
+      </div>
+      <div class="field-group symmetry">
+        Symmetry:
+        <button id="btn-horizontal" class="btn horizontal enabled">Horizontal</button>
+        <button id="btn-vertical" class="btn vertical enabled">Vertical</button>
+        <button id="btn-diagonal" class="btn diagonal enabled">Diagonal</button>
+      </div>
+    </div>
     <div id="crossword"></div>
     <div id="forms">
       <div id="horizontal" class="form horizontal"></div>
