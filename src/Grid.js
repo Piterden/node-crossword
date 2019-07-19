@@ -21,6 +21,7 @@ class Grid extends BaseClass {
     this.symmetry = {
       horizontal: true,
       vertical: true,
+      diagonal: true,
     }
   }
 
@@ -53,7 +54,7 @@ class Grid extends BaseClass {
         this.blanks.delete(horizontalId)
       }
 
-      if (this.symmetry.vertical && this.symmetry.horizontal) {
+      if (this.symmetry.diagonal) {
         this.blanks.delete(diagonalId)
       }
 
@@ -70,7 +71,7 @@ class Grid extends BaseClass {
       this.blanks.add(horizontalId)
     }
 
-    if (this.symmetry.vertical && this.symmetry.horizontal) {
+    if (this.symmetry.diagonal) {
       this.blanks.add(diagonalId)
     }
   }

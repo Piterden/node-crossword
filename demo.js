@@ -46,6 +46,22 @@ const horizontal = document.getElementById('horizontal')
 const startCells = new Map(
   crossword.grid.words.map(({ x, y, index }) => [`${x}:${y}`, index])
 )
+const controls = {
+  mode: document.getElementById('btn-mode'),
+  vertical: document.getElementById('btn-vertical'),
+  diagonal: document.getElementById('btn-diagonal'),
+  horizontal: document.getElementById('btn-horizontal'),
+}
+const methods = {
+  mode: () => crossword.toggleMode(),
+  diagonal: () => (crossword.grid.symmetry.diagonal = !crossword.grid.symmetry.diagonal),
+  vertical: () => (crossword.grid.symmetry.vertical = !crossword.grid.symmetry.vertical),
+  horizontal: () => (crossword.grid.symmetry.horizontal = !crossword.grid.symmetry.horizontal),
+}
+
+Object.keys(controls).forEach((key) => {
+  controls[key].addEventListener('click', (e) => { methods[key]() })
+})
 
 const createWordForm = (word) => {
   const letters = Array.from(

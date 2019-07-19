@@ -9,9 +9,11 @@ class Crossword extends BaseClass {
     }
   }
 
-  // constructor () {
-  //   super(...arguments)
-  // }
+  constructor () {
+    super(...arguments)
+
+    this.mode = 'grid'
+  }
 
   get horizontalWords () {
     return this.createWordsMap(
@@ -23,6 +25,10 @@ class Crossword extends BaseClass {
     return this.createWordsMap(
       this.grid.words.filter(({ isVertical }) => isVertical)
     )
+  }
+
+  toggleMode () {
+    this.mode = this.mode === 'grid' ? 'fill' : 'grid'
   }
 
   createWordsMap (words) {
