@@ -8,9 +8,11 @@ class Cell extends BaseClass {
     }
   }
 
-  // constructor (...args) {
-  //   super(...args)
-  // }
+  constructor (...args) {
+    super(...args)
+
+    this.letter = ''
+  }
 
   toString () {
     return `${this.x}:${this.y}`

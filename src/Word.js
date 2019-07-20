@@ -18,11 +18,15 @@ class Word extends BaseClass {
     super(...args)
 
     this.clues = []
-    this.word = ''
+    this.letters = new Map(this.cells.map((id, idx) => [id, '_']))
   }
 
   get cells () {
     return getWordCells(this)
+  }
+
+  get word () {
+    return [...this.letters.values()].join('')
   }
 }
 

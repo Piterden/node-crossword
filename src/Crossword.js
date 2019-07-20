@@ -35,8 +35,15 @@ class Crossword extends BaseClass {
     return new Map(words.map((word) => [word.index, word]))
   }
 
-  inputLetter ({ x, y, value }) {
-    this.letters[`${x}:${y}`] = value
+  setLetter (x, y, value) {
+    if (typeof value === 'undefined') {
+      if (typeof x === 'string' && x.split(':').length === 2 && typeof y === 'string') {
+        value = y
+        y = x.split(':')[1]
+        x = x.split(':')[0]
+      }
+    }
+    this.grid.cells.get(`${x}:${y}`).letter = value
   }
 }
 

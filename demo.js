@@ -86,39 +86,42 @@ const controls = {
   },
 }
 
-Object.keys(controls).forEach((key) => {
-  controls[key].el.addEventListener('click', controls[key].events.click)
-})
-
-const createWordForm = (word) => {
-  const letters = Array.from(
-    { length: word.length },
-    (item, idx) => `<div class="letter-wrap">
-<input type="text"
-  size="1"
-  minlength="1"
-  maxlength="1"
-  readonly />
-</div>`,
-  ).join('')
-
-  return `
-<div class="form">
-  <div class="letters-wrapper">
-    ${letters}
-  </div>
-
-</div>
-`
-}
-
 const render = () => {
+  const createWordForm = (word) => {
+    const letters = Array.from(
+      { length: word.length },
+      (item, idx) => `<div class="letter-wrap">
+  <input type="text"
+    size="1"
+    minlength="1"
+    maxlength="1"
+    value="${word.word[idx]}"
+    data-id="${word.cells[idx]}"
+  />
+  </div>`,
+    ).join('')
+
+    return `
+  <div class="form">
+    <div class="letters-wrapper">
+      ${letters}
+    </div>
+
+  </div>
+  `
+  }
+
+  Object.keys(controls).forEach((key) => {
+    controls[key].el.addEventListener('click', controls[key].events.click)
+  })
+
   const grid = Array.from(crossword.grid.cells.values())
     .map((cell) => `<div
     class="cell${crossword.grid.blanks.has(cell + []) ? ' blank' : ''}"
     data-id="${cell + []}"
   >
   ${startCells.get(cell + []) ? '<sup>' + startCells.get(cell + []) + '</sup>' : ''}
+  ${cell.letter}
   </div>`)
     .join('')
 
@@ -142,6 +145,17 @@ const render = () => {
   cellEls.forEach((cellEl) => {
     cellEl.addEventListener('click', (e) => {
       crossword.grid.toggleBlank(e.target.dataset.id)
+      render()
+    })
+  })
+
+  const wordsLetters = Array.from(document.querySelectorAll('.letter-wrap input'))
+
+  wordsLetters.forEach((wordLetter) => {
+    wordLetter.addEventListener('input', (e) => {
+      const [x, y] = e.target.dataset.id.split(':')
+
+      crossword.setLetter(x, y, e.target.value)
       render()
     })
   })

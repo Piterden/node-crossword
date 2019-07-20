@@ -178,7 +178,14 @@ class Grid extends BaseClass {
     return this.addIndexes([
       ...this.singleDirectionWords(true),
       ...this.singleDirectionWords(false),
-    ]).map((arr) => new Word(...arr))
+    ]).map((arr) => {
+      const id = `${arr[0]}:${arr[1]}`
+      const word = new Word(...arr)
+
+      word.letters.set(id, word.letters.get(id))
+
+      return word
+    })
   }
 
   addIndexes (words) {
