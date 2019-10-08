@@ -43,7 +43,7 @@ console.log(crossword)
 const el = document.getElementById('crossword')
 const vertical = document.getElementById('vertical')
 const horizontal = document.getElementById('horizontal')
-const startCells = new Map(
+const startCells = () => new Map(
   crossword.grid.words.map(({ x, y, index }) => [`${x}:${y}`, index])
 )
 
@@ -120,7 +120,7 @@ const render = () => {
     class="cell${crossword.grid.blanks.has(cell + []) ? ' blank' : ''}"
     data-id="${cell + []}"
   >
-  ${startCells.get(cell + []) ? '<sup>' + startCells.get(cell + []) + '</sup>' : ''}
+  ${startCells().get(cell + []) ? '<sup>' + startCells().get(cell + []) + '</sup>' : ''}
   ${cell.letter}
   </div>`)
     .join('')
