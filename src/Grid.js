@@ -174,7 +174,7 @@ class Grid extends BaseClass {
     return words
   }
 
-  get words () {
+  words () {
     return this.addIndexes([
       ...this.singleDirectionWords(true),
       ...this.singleDirectionWords(false),

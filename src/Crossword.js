@@ -23,13 +23,13 @@ class Crossword extends BaseClass {
 
   get horizontalWords () {
     return this.createWordsMap(
-      this.grid.words.filter(({ isVertical }) => !isVertical)
+      this.grid.words().filter(({ isVertical }) => !isVertical)
     )
   }
 
   get verticalWords () {
     return this.createWordsMap(
-      this.grid.words.filter(({ isVertical }) => isVertical)
+      this.grid.words().filter(({ isVertical }) => isVertical)
     )
   }
 
@@ -52,7 +52,7 @@ class Crossword extends BaseClass {
 
     this.grid.cells.get(`${x}:${y}`).letter = value
 
-    this.grid.words
+    this.grid.words()
       .filter(({ cells }) => cells.includes(`${x}:${y}`))
       .forEach((word) => word.letters.set(`${x}:${y}`, value))
   }
